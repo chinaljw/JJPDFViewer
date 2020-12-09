@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1462F9F9081F26F22C29753C /* Pods_JJPDFViewer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C632E4FE7049B12AB7030311 /* Pods_JJPDFViewer_Tests.framework */; };
+		5037ADA5A21EF43FF40C4902 /* libPods-JJPDFViewer_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB9D3E11BB889F1EB3B695B6 /* libPods-JJPDFViewer_Tests.a */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		7D2241376DF834B96675F8C7 /* Pods_JJPDFViewer_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5772C17543E36A1DF24AA496 /* Pods_JJPDFViewer_Example.framework */; };
+		C6FCABCDA2B4EA1DBDD2E990 /* libPods-JJPDFViewer_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3352E74E6321F82181B54D0D /* libPods-JJPDFViewer_Example.a */; };
+		F81D6FE8257F603400E0135D /* javaScript.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE4257F603400E0135D /* javaScript.pdf */; };
+		F81D6FE9257F603400E0135D /* apple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE5257F603400E0135D /* apple.pdf */; };
+		F81D6FEA257F603400E0135D /* large.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE6257F603400E0135D /* large.pdf */; };
+		F81D6FEB257F603400E0135D /* mongodb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE7257F603400E0135D /* mongodb.pdf */; };
+		F8572AC7257F7F6600A77940 /* vertical.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F8572AC6257F7F6600A77940 /* vertical.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,9 +33,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3352E74E6321F82181B54D0D /* libPods-JJPDFViewer_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJPDFViewer_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		33E96C0DC3231E9C70D38AE1 /* Pods-JJPDFViewer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Tests.debug.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Tests/Pods-JJPDFViewer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		3A9D582EFE4ECE761F539073 /* JJPDFViewer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = JJPDFViewer.podspec; path = ../JJPDFViewer.podspec; sourceTree = "<group>"; };
-		5772C17543E36A1DF24AA496 /* Pods_JJPDFViewer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JJPDFViewer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A9D582EFE4ECE761F539073 /* JJPDFViewer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JJPDFViewer.podspec; path = ../JJPDFViewer.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		607FACD01AFB9204008FA782 /* JJPDFViewer_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JJPDFViewer_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,11 +47,16 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		82BF5FB6F88EF6AF4CD82DB6 /* Pods-JJPDFViewer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Example.release.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Example/Pods-JJPDFViewer_Example.release.xcconfig"; sourceTree = "<group>"; };
-		9034F378D293C9ADEE634C25 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		C632E4FE7049B12AB7030311 /* Pods_JJPDFViewer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JJPDFViewer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CDDF755A62EC31D45AA19908 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9034F378D293C9ADEE634C25 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		CB9D3E11BB889F1EB3B695B6 /* libPods-JJPDFViewer_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJPDFViewer_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDDF755A62EC31D45AA19908 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D24519223E1532B2F1AB1933 /* Pods-JJPDFViewer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Example.debug.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Example/Pods-JJPDFViewer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D5A2F79561944086EE477503 /* Pods-JJPDFViewer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Tests.release.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Tests/Pods-JJPDFViewer_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		F81D6FE4257F603400E0135D /* javaScript.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = javaScript.pdf; sourceTree = "<group>"; };
+		F81D6FE5257F603400E0135D /* apple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = apple.pdf; sourceTree = "<group>"; };
+		F81D6FE6257F603400E0135D /* large.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = large.pdf; sourceTree = "<group>"; };
+		F81D6FE7257F603400E0135D /* mongodb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = mongodb.pdf; sourceTree = "<group>"; };
+		F8572AC6257F7F6600A77940 /* vertical.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = vertical.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D2241376DF834B96675F8C7 /* Pods_JJPDFViewer_Example.framework in Frameworks */,
+				C6FCABCDA2B4EA1DBDD2E990 /* libPods-JJPDFViewer_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1462F9F9081F26F22C29753C /* Pods_JJPDFViewer_Tests.framework in Frameworks */,
+				5037ADA5A21EF43FF40C4902 /* libPods-JJPDFViewer_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +87,6 @@
 				33E96C0DC3231E9C70D38AE1 /* Pods-JJPDFViewer_Tests.debug.xcconfig */,
 				D5A2F79561944086EE477503 /* Pods-JJPDFViewer_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -119,6 +128,11 @@
 		607FACD31AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F8572AC6257F7F6600A77940 /* vertical.pdf */,
+				F81D6FE5257F603400E0135D /* apple.pdf */,
+				F81D6FE4257F603400E0135D /* javaScript.pdf */,
+				F81D6FE6257F603400E0135D /* large.pdf */,
+				F81D6FE7257F603400E0135D /* mongodb.pdf */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -154,8 +168,8 @@
 		A357E0CF2EC1BDF4086B9285 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5772C17543E36A1DF24AA496 /* Pods_JJPDFViewer_Example.framework */,
-				C632E4FE7049B12AB7030311 /* Pods_JJPDFViewer_Tests.framework */,
+				3352E74E6321F82181B54D0D /* libPods-JJPDFViewer_Example.a */,
+				CB9D3E11BB889F1EB3B695B6 /* libPods-JJPDFViewer_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,7 +185,6 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				996EC48841C7960ECB76D1AB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -213,10 +226,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = C9UB499GUX;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = C9UB499GUX;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -227,6 +242,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -247,8 +263,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				F81D6FE9257F603400E0135D /* apple.pdf in Resources */,
+				F81D6FEA257F603400E0135D /* large.pdf in Resources */,
+				F8572AC7257F7F6600A77940 /* vertical.pdf in Resources */,
+				F81D6FE8257F603400E0135D /* javaScript.pdf in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				F81D6FEB257F603400E0135D /* mongodb.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,24 +325,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		996EC48841C7960ECB76D1AB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-JJPDFViewer_Example/Pods-JJPDFViewer_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/JJPDFViewer/JJPDFViewer.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JJPDFViewer.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JJPDFViewer_Example/Pods-JJPDFViewer_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -478,6 +481,7 @@
 			baseConfigurationReference = D24519223E1532B2F1AB1933 /* Pods-JJPDFViewer_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = C9UB499GUX;
 				INFOPLIST_FILE = JJPDFViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -493,6 +497,7 @@
 			baseConfigurationReference = 82BF5FB6F88EF6AF4CD82DB6 /* Pods-JJPDFViewer_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = C9UB499GUX;
 				INFOPLIST_FILE = JJPDFViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -507,6 +512,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 33E96C0DC3231E9C70D38AE1 /* Pods-JJPDFViewer_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = C9UB499GUX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -529,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D5A2F79561944086EE477503 /* Pods-JJPDFViewer_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = C9UB499GUX;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
