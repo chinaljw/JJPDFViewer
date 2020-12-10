@@ -34,6 +34,8 @@ extension ViewController {
     
     func loadPage() {
 //        self.pdfView.scrollDirection = .vertical
+//        self.pdfView.doubleTapToZoom = false
+//        self.pdfView.maximumZoomScale = 10
         self.pdfView.delegate = self
         self.pdfView.document = self.document(with: "large")
     }

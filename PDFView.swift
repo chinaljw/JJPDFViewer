@@ -12,8 +12,8 @@ public protocol PDFViewDelegate: NSObjectProtocol {
     func pdfView(_ view: PDFView, didChangePageIndex index: Int)
 }
 
-open class PDFView: UIView {
-        
+open class PDFView: UIView, PDFPageConfig {
+    
     public enum ScrollDirection {
         
         case horizontal
@@ -54,6 +54,14 @@ open class PDFView: UIView {
     public var showsScrollIndicator: Bool = false {
         didSet {
             self.updateScrollIndicatorSetting()
+        }
+    }
+    
+    public var maximumZoomScale: CGFloat = 4.0
+    public var doubleTapToZoom: Bool = true
+    public var pageBackgroundColor: UIColor = .white {
+        didSet {
+            self.collectionView.backgroundColor = self.pageBackgroundColor
         }
     }
     
@@ -117,6 +125,7 @@ extension PDFView: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? PDFCell {
+            cell.pageView.fill(with: self)
             cell.refresh(with: self.document?.page(of: indexPath.row + 1))
         }
     }
@@ -163,7 +172,7 @@ extension PDFView {
 private extension PDFView {
     
     func setup() {
-        self.collectionView.backgroundColor = .white
+        self.collectionView.backgroundColor = self.pageBackgroundColor
         self.collectionView.register(PDFCell.classForCoder(), forCellWithReuseIdentifier: PDFCell.identifier)
         let flowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = self.scrollDirection.direction
@@ -176,6 +185,7 @@ private extension PDFView {
     }
     
     func relayout() {
+        // Invalidate first
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.frame = self.bounds
     }
