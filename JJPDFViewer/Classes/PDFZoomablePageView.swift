@@ -27,7 +27,7 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
             guard oldValue != self.maximumZoomScale else {
                 return
             }
-            self.scrollView.maximumZoomScale = self.maximumZoomScale
+            self.updateMaximumZoomScale()
         }
     }
     public var pageBackgroundColor: UIColor = .white {
@@ -77,13 +77,13 @@ private extension PDFZoomablePageView {
     func setup() {
         self.updatePageBackgroundColor()
         self.updateZoomGesture()
-        self.addSubview(self.scrollView)
-        self.scrollView.maximumZoomScale = self.maximumZoomScale
+        self.updateMaximumZoomScale()
         self.scrollView.minimumZoomScale = 1.0
         self.scrollView.delegate = self
         self.scrollView.addSubview(self.pageView)
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.showsVerticalScrollIndicator = false
+        self.addSubview(self.scrollView)
         self.relayoutIfNeeded()
     }
     
@@ -186,6 +186,11 @@ private extension PDFZoomablePageView {
     func updatePageBackgroundColor() {
         self.scrollView.backgroundColor = self.pageBackgroundColor
     }
+    
+    func updateMaximumZoomScale() {
+        self.scrollView.maximumZoomScale = self.maximumZoomScale
+        self.pageView.pageLayer.maximumZoomScale = self.maximumZoomScale
+    }
 }
 
 // MARK: - UIScrollViewDelegate
@@ -196,6 +201,7 @@ extension PDFZoomablePageView: UIScrollViewDelegate {
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+//        print("didZoom - scale: \(scrollView.zoomScale)")
         self.adjustCenter(of: self.pageView, with: scrollView)
         if let zoomPoint = self.zoomPoint {
             self.scroll(zoomPoint, toCenterOf: scrollView)
@@ -203,6 +209,7 @@ extension PDFZoomablePageView: UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+//        print("didZoom - layer: \(self.pageView.pageLayer)")
         self.zoomPoint = nil
     }
 }

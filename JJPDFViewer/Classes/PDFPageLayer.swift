@@ -9,6 +9,12 @@ import Foundation
 
 open class PDFPageLayer: CATiledLayer {
     
+    open var maximumZoomScale: CGFloat = 1 {
+        didSet {
+            self.updateDetails()
+        }
+    }
+    
     open var pdfBackgroundColor: UIColor = .white {
         didSet {
             self.redraw()
@@ -23,6 +29,7 @@ open class PDFPageLayer: CATiledLayer {
     
     public override init(layer: Any) {
         super.init(layer: layer)
+//        print("init layer - layer: \(layer)")
         self.setup()
     }
     
@@ -41,6 +48,7 @@ open class PDFPageLayer: CATiledLayer {
             ctx.clear(self.bounds)
             return
         }
+//        print("draw in - layer: \(Unmanaged.passUnretained(self).toOpaque())")
         self.tileSize = .init(width: self.bounds.width * 3, height: self.bounds.height * 3)
         ctx.setFillColor(self.pdfBackgroundColor.cgColor)
         ctx.fill(ctx.boundingBoxOfClipPath)
@@ -68,7 +76,13 @@ public extension PDFPageLayer {
 private extension PDFPageLayer {
     
     func setup() {
-        self.levelsOfDetail = 4
-        self.levelsOfDetailBias = 4
+        self.updateDetails()
+    }
+    
+    func updateDetails() {
+        let details = Int(ceil(log2(self.maximumZoomScale)))
+//        print("updateDetails - details: \(details), scale: \(self.maximumZoomScale)")
+        self.levelsOfDetail = details
+        self.levelsOfDetailBias = details
     }
 }
