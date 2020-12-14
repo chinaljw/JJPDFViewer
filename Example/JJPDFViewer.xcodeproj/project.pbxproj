@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		C6FCABCDA2B4EA1DBDD2E990 /* libPods-JJPDFViewer_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3352E74E6321F82181B54D0D /* libPods-JJPDFViewer_Example.a */; };
+		F812DCCB25849F67009159A5 /* PDFViewControllerDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812DCCA25849F67009159A5 /* PDFViewControllerDemo.swift */; };
 		F81D6FE8257F603400E0135D /* javaScript.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE4257F603400E0135D /* javaScript.pdf */; };
 		F81D6FE9257F603400E0135D /* apple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE5257F603400E0135D /* apple.pdf */; };
 		F81D6FEA257F603400E0135D /* large.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE6257F603400E0135D /* large.pdf */; };
@@ -52,6 +53,7 @@
 		CDDF755A62EC31D45AA19908 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D24519223E1532B2F1AB1933 /* Pods-JJPDFViewer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Example.debug.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Example/Pods-JJPDFViewer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D5A2F79561944086EE477503 /* Pods-JJPDFViewer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJPDFViewer_Tests.release.xcconfig"; path = "Target Support Files/Pods-JJPDFViewer_Tests/Pods-JJPDFViewer_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		F812DCCA25849F67009159A5 /* PDFViewControllerDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewControllerDemo.swift; sourceTree = "<group>"; };
 		F81D6FE4257F603400E0135D /* javaScript.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = javaScript.pdf; sourceTree = "<group>"; };
 		F81D6FE5257F603400E0135D /* apple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = apple.pdf; sourceTree = "<group>"; };
 		F81D6FE6257F603400E0135D /* large.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = large.pdf; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				F812DCCA25849F67009159A5 /* PDFViewControllerDemo.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -335,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				F812DCCB25849F67009159A5 /* PDFViewControllerDemo.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

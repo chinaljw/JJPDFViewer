@@ -49,7 +49,8 @@ open class PDFPageLayer: CATiledLayer {
             return
         }
 //        print("draw in - layer: \(Unmanaged.passUnretained(self).toOpaque())")
-        self.tileSize = .init(width: self.bounds.width * 3, height: self.bounds.height * 3)
+        let scale: CGFloat = 4
+        self.tileSize = .init(width: self.bounds.width * scale, height: self.bounds.height * scale)
         ctx.setFillColor(self.pdfBackgroundColor.cgColor)
         ctx.fill(ctx.boundingBoxOfClipPath)
         ctx.translateBy(x: 0.0, y: self.bounds.height)
@@ -82,6 +83,7 @@ private extension PDFPageLayer {
     func updateDetails() {
         let details = Int(ceil(log2(self.maximumZoomScale)))
 //        print("updateDetails - details: \(details), scale: \(self.maximumZoomScale)")
+        self.contentsScale = 1.0
         self.levelsOfDetail = details
         self.levelsOfDetailBias = details
     }

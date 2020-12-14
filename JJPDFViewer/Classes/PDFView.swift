@@ -97,6 +97,9 @@ public extension PDFView {
     func reload() {
         self.collectionView.reloadData()
         if self.document?.numberOfPages ?? 0 > 0 {
+            if self.currentPageIndex == 1 {
+                self.delegate?.pdfView(self, didChangePageIndex: 1)
+            }
             self.scrollToPageAt(index: 1)
         } else {
             self.currentPageIndex = 0

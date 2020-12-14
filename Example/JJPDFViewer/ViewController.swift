@@ -35,15 +35,13 @@ extension ViewController {
     func loadPage() {
 //        self.pdfView.scrollDirection = .vertical
 //        self.pdfView.doubleTapToZoom = false
-        self.pdfView.maximumZoomScale = 8
+        self.pdfView.maximumZoomScale = 32
         self.pdfView.delegate = self
         self.pdfView.document = self.document(with: "large")
     }
     
     func document(with name: String) -> PDFDocument? {
-        guard
-            let path = Bundle.main.path(forResource: name, ofType: "pdf")
-        else {
+        guard let path = name.pdfPathInMainBundle else {
             return nil
         }
         let url = URL(fileURLWithPath: path)
@@ -55,5 +53,12 @@ extension ViewController: PDFViewDelegate {
     
     func pdfView(_ view: PDFView, didChangePageIndex index: Int) {
         print("didChangePageIndex - index: \(index)")
+    }
+}
+
+extension String {
+    
+    var pdfPathInMainBundle: String? {
+        return Bundle.main.path(forResource: self, ofType: "pdf")
     }
 }
