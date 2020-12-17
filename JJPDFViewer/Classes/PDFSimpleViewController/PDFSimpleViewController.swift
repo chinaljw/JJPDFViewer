@@ -11,6 +11,7 @@ public class PDFSimpleViewController: PDFViewController {
     
     public convenience init(url: URL?) {
         self.init()
+        self.pdfView.maximumZoomScale = 100
         self.documentLoader = Loader(url: url)
         self.loadingView = LoadingView(frame: .zero)
     }

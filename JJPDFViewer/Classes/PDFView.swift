@@ -40,6 +40,14 @@ open class PDFView: UIView, PDFPageConfig {
     
     public var document: PDFDocument? {
         didSet {
+            guard self.document != oldValue else {
+                return
+            }
+            if let document = self.document?.raw {
+                self.loader = .init(document: document, preloadNumber: 3)
+            } else {
+                self.loader = nil
+            }
             self.reload()
         }
     }
@@ -90,6 +98,13 @@ open class PDFView: UIView, PDFPageConfig {
         super.layoutSubviews()
         self.relayout()
     }
+    
+    // MARK: -
+    var loader: PDFPagePreviewLoader?
+    
+    deinit {
+        PDFPageView.ImageLayer.loader = nil
+    }
 }
 
 public extension PDFView {
@@ -130,6 +145,29 @@ extension PDFView: UICollectionViewDataSource {
         if let cell = cell as? PDFCell {
             cell.pageView.fill(with: self)
             cell.refresh(with: self.document?.page(of: indexPath.row + 1))
+        }
+        self.preloadNext(fromCurrent: indexPath.row + 1)
+    }
+    
+    func preloadNext(next: Int = 1, fromCurrent current: Int) {
+        for i in 1...next {
+            self.preloadPage(at: current + i)
+            self.preloadPage(at: current - i)
+        }
+    }
+    
+    func preloadPage(at index: Int) {
+        let loader = PDFPageView.ImageLayer.loader
+        if let page = self.document?.page(of: index) {
+            print("preload page: \(page), index: \(index)")
+            let size = PDFZoomablePageView.fitSize(of: page, with: self.collectionView.bounds.size)
+            loader?.load(page: page, with: size)
+        }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let cell = cell as? PDFCell {
+            cell.pageView.pageView.pageLayer.contents = nil
         }
     }
 }
