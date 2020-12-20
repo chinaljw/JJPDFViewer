@@ -29,7 +29,6 @@ open class PDFPageLayer: CATiledLayer {
     
     public override init(layer: Any) {
         super.init(layer: layer)
-//        print("init layer - layer: \(layer)")
         self.setup()
     }
     
@@ -43,48 +42,35 @@ open class PDFPageLayer: CATiledLayer {
         self.setup()
     }
     
-    open override func setNeedsDisplay() {
-        super.setNeedsDisplay()
-        print("set needs display")
+    open override var bounds: CGRect {
+        didSet {
+            guard self.bounds.size != oldValue.size else {
+                return
+            }
+            let scale: CGFloat = UIScreen.main.scale
+            self.tileSize = .init(width: self.bounds.width * scale, height: self.bounds.height * scale)
+            self.redraw()
+        }
     }
     
     public override func draw(in ctx: CGContext) {
-//        super.draw(in: ctx)
-//        return
         guard let page = self.page else {
             ctx.clear(self.bounds)
             return
         }
-        print("ctx: \(ctx), bounds: \(self.bounds)")
-//        ctx.saveGState()
-//        print("draw in - layer: \(Unmanaged.passUnretained(self).toOpaque())")
-//        let coolHeight = CGFloat(round(Double(self.bounds.size.height)))
-        
         ctx.setFillColor(self.pdfBackgroundColor.cgColor)
         ctx.fill(ctx.boundingBoxOfClipPath)
         ctx.translateBy(x: 0.0, y: self.bounds.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
-//        var rect = self.bounds
-//        rect.size.height = self.bounds.height
         let transform = page.getDrawingTransform(.cropBox, rect: self.bounds, rotate: 0, preserveAspectRatio: true)
-//        let rect = page.getBoxRect(.cropBox)
-//        ctx.scaleBy(x: self.bounds.width / rect.width, y: self.bounds.height / rect.height)
-//        print("draw - frame: \(self.frame), bounds: \(self.bounds), tileSize: \(self.tileSize), transform: \(transform)")
         ctx.concatenate(transform)
         ctx.drawPDFPage(page)
-        if let cgImage = ctx.makeImage(), let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
-            let filePath = path.appending("/test2.png")
-            try? UIImagePNGRepresentation(UIImage(cgImage: cgImage))?.write(to: .init(fileURLWithPath: filePath))
-        }
-//        ctx.restoreGState()
     }
 }
 
 public extension PDFPageLayer {
     
     func redraw() {
-        let scale: CGFloat = 2
-        self.tileSize = .init(width: self.bounds.width * scale, height: self.bounds.height * scale)
         self.clear()
         self.setNeedsDisplay()
     }
@@ -102,8 +88,6 @@ private extension PDFPageLayer {
     
     func updateDetails() {
         let details = Int(ceil(log2(self.maximumZoomScale)))
-//        print("updateDetails - details: \(details), scale: \(self.maximumZoomScale)")
-//        self.contentsScale = 1.0
         self.levelsOfDetail = details
         self.levelsOfDetailBias = details
     }

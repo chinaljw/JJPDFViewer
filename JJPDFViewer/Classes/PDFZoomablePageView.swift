@@ -37,10 +37,9 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
     
     public var page: CGPDFPage? {
         set {
-            self.preview.isHidden = false
+            self.firstFrameView.isHidden = false
             self.pageView.page = newValue
             self.relayout()
-            self.preview.page = newValue
         }
         get {
             return self.pageView.page
@@ -50,7 +49,7 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
     private var zoomGesture: UITapGestureRecognizer?
     private var zoomPoint: CGPoint?
     
-    let preview: PDFPageView.PreviewView = .init(frame: .zero)
+    let firstFrameView: UIImageView = .init(frame: .zero)
     
     open override var frame: CGRect {
         didSet {
@@ -73,15 +72,8 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
         self.relayoutIfNeeded()
     }
     
-    static func fitSize(of page: CGPDFPage, with viewSize: CGSize) -> CGSize {
-        let pageSize = page.getBoxRect(.cropBox).size
-        let pageRatio = pageSize.width / pageSize.height
-        let viewRatio = viewSize.width / viewSize.height
-        let isHorizontalFirst = pageRatio > viewRatio
-        var result = CGSize.zero
-        result.height = isHorizontalFirst ? viewSize.width / pageSize.width * pageSize.height : viewSize.height
-        result.width = isHorizontalFirst ? viewSize.width : viewSize.height / pageSize.height * pageSize.width
-        return result
+    public func setFirstFrame(_ image: UIImage?) {
+        self.firstFrameView.image = image
     }
 }
 
@@ -92,16 +84,15 @@ private extension PDFZoomablePageView {
         self.updatePageBackgroundColor()
         self.updateZoomGesture()
         self.updateMaximumZoomScale()
+        self.addSubview(self.firstFrameView)
+        self.scrollView.backgroundColor = nil
         self.scrollView.minimumZoomScale = 1.0
         self.scrollView.delegate = self
-        self.scrollView.addSubview(self.preview)
         self.scrollView.addSubview(self.pageView)
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.showsVerticalScrollIndicator = false
         self.addSubview(self.scrollView)
         self.relayoutIfNeeded()
-//        self.pageView.isHidden = true
-//        self.preview.isHidden = true
     }
     
     func relayout() {
@@ -111,11 +102,11 @@ private extension PDFZoomablePageView {
             let fitSize = self.fitSize(for: page)
             self.pageView.frame.size = self.fitSize(for: page)
             self.pageView.center = self.scrollView.center
-            self.preview.frame = self.pageView.frame
+            self.firstFrameView.frame = self.pageView.frame
             self.scrollView.contentSize = fitSize
         } else {
             self.pageView.frame = Self.uninitialFrame
-            self.preview.frame = self.pageView.frame
+            self.firstFrameView.frame = self.pageView.frame
         }
     }
     
@@ -140,7 +131,7 @@ private extension PDFZoomablePageView {
     }
     
     func fitSize(for page: CGPDFPage) -> CGSize {
-        return Self.fitSize(of: page, with: self.scrollView.frame.size)
+        return page.fitSize(with: self.scrollView.bounds.size)
     }
     
     func scroll(_ point: CGPoint, toCenterOf scrollView: UIScrollView) {
@@ -195,7 +186,7 @@ private extension PDFZoomablePageView {
     }
     
     func updatePageBackgroundColor() {
-        self.scrollView.backgroundColor = self.pageBackgroundColor
+        self.backgroundColor = self.pageBackgroundColor
     }
     
     func updateMaximumZoomScale() {
@@ -208,7 +199,7 @@ private extension PDFZoomablePageView {
 extension PDFZoomablePageView: UIScrollViewDelegate {
     
     public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        self.preview.isHidden = true
+        self.firstFrameView.isHidden = true
     }
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -216,18 +207,14 @@ extension PDFZoomablePageView: UIScrollViewDelegate {
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-//        print("didZoom - scale: \(scrollView.zoomScale)")
         self.adjustCenter(of: self.pageView, with: scrollView)
         if let zoomPoint = self.zoomPoint {
             self.scroll(zoomPoint, toCenterOf: scrollView)
         }
-//        self.preview.layer.setAffineTransform(.init(scaleX: scrollView.zoomScale, y: scrollView.zoomScale))
-//        self.preview.center = self.pageView.center
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-//        print("didZoom - layer: \(self.pageView.pageLayer)")
         self.zoomPoint = nil
-        self.preview.isHidden = scale <= 1.0
+        self.firstFrameView.isHidden = scale != 1.0
     }
 }

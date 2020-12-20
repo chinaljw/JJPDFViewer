@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didClickReloadItem(_ sender: Any) {
-        self.pdfView.document = self.document(with: "vertical")
+        self.pdfView.document = self.document(with: "mongodb")
 //        self.pdfView.scrollToPageAt(index: 1, animated: true)
     }
 }
@@ -37,7 +37,7 @@ extension ViewController {
 //        self.pdfView.doubleTapToZoom = false
         self.pdfView.maximumZoomScale = 100
         self.pdfView.delegate = self
-        self.pdfView.document = self.document(with: "large")
+        self.pdfView.document = self.document(with: "javaScript")
     }
     
     func document(with name: String) -> PDFDocument? {

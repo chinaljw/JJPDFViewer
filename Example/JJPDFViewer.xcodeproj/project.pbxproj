@@ -18,9 +18,7 @@
 		F812DCCB25849F67009159A5 /* PDFViewControllerDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F812DCCA25849F67009159A5 /* PDFViewControllerDemo.swift */; };
 		F81D6FE8257F603400E0135D /* javaScript.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE4257F603400E0135D /* javaScript.pdf */; };
 		F81D6FE9257F603400E0135D /* apple.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE5257F603400E0135D /* apple.pdf */; };
-		F81D6FEA257F603400E0135D /* large.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE6257F603400E0135D /* large.pdf */; };
 		F81D6FEB257F603400E0135D /* mongodb.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F81D6FE7257F603400E0135D /* mongodb.pdf */; };
-		F8572AC7257F7F6600A77940 /* vertical.pdf in Resources */ = {isa = PBXBuildFile; fileRef = F8572AC6257F7F6600A77940 /* vertical.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,9 +54,7 @@
 		F812DCCA25849F67009159A5 /* PDFViewControllerDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewControllerDemo.swift; sourceTree = "<group>"; };
 		F81D6FE4257F603400E0135D /* javaScript.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = javaScript.pdf; sourceTree = "<group>"; };
 		F81D6FE5257F603400E0135D /* apple.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = apple.pdf; sourceTree = "<group>"; };
-		F81D6FE6257F603400E0135D /* large.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = large.pdf; sourceTree = "<group>"; };
 		F81D6FE7257F603400E0135D /* mongodb.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = mongodb.pdf; sourceTree = "<group>"; };
-		F8572AC6257F7F6600A77940 /* vertical.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = vertical.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,10 +127,8 @@
 		607FACD31AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F8572AC6257F7F6600A77940 /* vertical.pdf */,
 				F81D6FE5257F603400E0135D /* apple.pdf */,
 				F81D6FE4257F603400E0135D /* javaScript.pdf */,
-				F81D6FE6257F603400E0135D /* large.pdf */,
 				F81D6FE7257F603400E0135D /* mongodb.pdf */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
 			);
@@ -267,8 +261,6 @@
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				F81D6FE9257F603400E0135D /* apple.pdf in Resources */,
-				F81D6FEA257F603400E0135D /* large.pdf in Resources */,
-				F8572AC7257F7F6600A77940 /* vertical.pdf in Resources */,
 				F81D6FE8257F603400E0135D /* javaScript.pdf in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,

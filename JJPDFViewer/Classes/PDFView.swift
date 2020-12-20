@@ -44,7 +44,8 @@ open class PDFView: UIView, PDFPageConfig {
                 return
             }
             if let document = self.document?.raw {
-                self.loader = .init(document: document, preloadNumber: 3)
+                self.loader = .init(document: document)
+                self.loader?.pdfViewSize = self.bounds.size
             } else {
                 self.loader = nil
             }
@@ -99,12 +100,18 @@ open class PDFView: UIView, PDFPageConfig {
         self.relayout()
     }
     
-    // MARK: -
-    var loader: PDFPagePreviewLoader?
-    
-    deinit {
-        PDFPageView.ImageLayer.loader = nil
+    open override var bounds: CGRect {
+        didSet {
+//            print("didChangeBounds: \(self.bounds)")
+            guard self.bounds.size != oldValue.size else {
+                return
+            }
+            self.handleSizeChanging()
+        }
     }
+    
+    // MARK: -
+    var loader: PDFPageFirstFrameLoader?
 }
 
 public extension PDFView {
@@ -142,33 +149,16 @@ extension PDFView: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let pageIndex = indexPath.row + 1
         if let cell = cell as? PDFCell {
             cell.pageView.fill(with: self)
-            cell.refresh(with: self.document?.page(of: indexPath.row + 1))
+            let page = self.document?.page(of: pageIndex)
+            cell.refresh(with: page)
+            self.loadFirstFrame(of: page, for: cell)
         }
-        self.preloadNext(fromCurrent: indexPath.row + 1)
-    }
-    
-    func preloadNext(next: Int = 1, fromCurrent current: Int) {
-        for i in 1...next {
-            self.preloadPage(at: current + i)
-            self.preloadPage(at: current - i)
-        }
-    }
-    
-    func preloadPage(at index: Int) {
-        let loader = PDFPageView.ImageLayer.loader
-        if let page = self.document?.page(of: index) {
-            print("preload page: \(page), index: \(index)")
-            let size = PDFZoomablePageView.fitSize(of: page, with: self.collectionView.bounds.size)
-            loader?.load(page: page, with: size)
-        }
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? PDFCell {
-            cell.pageView.pageView.pageLayer.contents = nil
-        }
+        // preload
+        self.loader?.preload(forCurrentIndex: pageIndex)
+//        print("willDisplay - cell: \(cell)")
     }
 }
 
@@ -248,5 +238,29 @@ private extension PDFView {
     func updateScrollIndicatorSetting() {
         self.collectionView.showsHorizontalScrollIndicator = self.showsScrollIndicator
         self.collectionView.showsVerticalScrollIndicator = self.showsScrollIndicator
+    }
+    
+    func handleSizeChanging() {
+        self.loader?.pdfViewSize = self.bounds.size
+        self.loader?.preload(forCurrentIndex: self.currentPageIndex)
+        let page = self.document?.page(of: self.currentPageIndex)
+        let cell = self.collectionView.cellForItem(at: .init(item: self.currentPageIndex - 1,
+        section: 0))
+        if let cell = cell as? PDFCell {
+            self.loadFirstFrame(of: page, for: cell)
+        }
+    }
+    
+    func loadFirstFrame(of page: CGPDFPage?, for cell: PDFCell) {
+        guard let page = page else {
+            return
+        }
+        self.loader?.load(page: page, completion: { [weak cell] (page, image) in
+            guard let cell = cell, cell.pageView.page == page else {
+                return
+            }
+//            print("didLoadFirstFrame - page: \(page), imageSize: \(image?.size), cell: \(cell)")
+            cell.pageView.setFirstFrame(image)
+        })
     }
 }

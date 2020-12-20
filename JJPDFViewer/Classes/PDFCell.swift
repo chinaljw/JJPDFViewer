@@ -33,6 +33,11 @@ open class PDFCell: UICollectionViewCell {
         super.layoutSubviews()
         self.relayout()
     }
+    
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+        self.pageView.setFirstFrame(nil)
+    }
 }
 
 public extension PDFCell {

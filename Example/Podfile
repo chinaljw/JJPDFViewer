@@ -1,5 +1,5 @@
 #use_frameworks!
-
+use_modular_headers!
 platform :ios, '9.0'
 
 target 'JJPDFViewer_Example' do
