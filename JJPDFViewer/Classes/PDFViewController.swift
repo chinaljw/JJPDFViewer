@@ -87,7 +87,7 @@ open class PDFViewController: UIViewController, PDFDocumentLoaderDelegate {
 
 private extension PDFViewController {
     
-    func adddConstraint(to view: UIView, withItem item: Any, from: NSLayoutAttribute, to: NSLayoutAttribute) {
+    func adddConstraint(to view: UIView, withItem item: Any, from: NSLayoutConstraint.Attribute, to: NSLayoutConstraint.Attribute) {
         view.translatesAutoresizingMaskIntoConstraints = false
         let constraint = NSLayoutConstraint(item: view, attribute: from, relatedBy: .equal, toItem: item, attribute: to, multiplier: 1.0, constant: 0.0)
         view.superview?.addConstraint(constraint)

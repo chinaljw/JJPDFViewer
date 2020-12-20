@@ -180,7 +180,7 @@ public extension PDFSimpleViewController {
     
     class LoadingView: UIView {
         
-        let indicator: UIActivityIndicatorView = .init(activityIndicatorStyle: .gray)
+        let indicator: UIActivityIndicatorView = .init(style: .gray)
         let failureLabel: UILabel = .init(frame: .zero)
         
         public override var bounds: CGRect {
