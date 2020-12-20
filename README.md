@@ -22,7 +22,7 @@ pod 'JJPDFViewer'
 
 ## Author
 
-chinaljw, alan.lin@gaodun.com
+weigege, weigegenb666@gmail.com
 
 ## License
 
