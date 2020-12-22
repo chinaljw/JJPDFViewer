@@ -37,7 +37,7 @@ extension ViewController {
 //        self.pdfView.doubleTapToZoom = false
         self.pdfView.maximumZoomScale = 100
         self.pdfView.delegate = self
-        self.pdfView.document = self.document(with: "javaScript")
+        self.pdfView.document = self.document(with: "large")
     }
     
     func document(with name: String) -> PDFDocument? {

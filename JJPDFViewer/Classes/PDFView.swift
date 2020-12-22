@@ -95,16 +95,13 @@ open class PDFView: UIView, PDFPageConfig {
         self.setup()
     }
     
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        self.relayout()
-    }
-    
     open override var bounds: CGRect {
         didSet {
-//            print("didChangeBounds: \(self.bounds)")
             guard self.bounds.size != oldValue.size else {
                 return
+            }
+            if self.collectionView.isDragging {
+                self.isChangingBounceInDragging = true
             }
             self.handleSizeChanging()
         }
@@ -112,6 +109,8 @@ open class PDFView: UIView, PDFPageConfig {
     
     // MARK: -
     var loader: PDFPageFirstFrameLoader?
+    
+    private var isChangingBounceInDragging: Bool = false
 }
 
 public extension PDFView {
@@ -158,18 +157,13 @@ extension PDFView: UICollectionViewDataSource {
         }
         // preload
         self.loader?.preload(forCurrentIndex: pageIndex)
-//        print("willDisplay - cell: \(cell)")
     }
 }
 
 extension PDFView: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, targetContentOffsetForProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        let isHorizontal = self.scrollDirection == .horizontal
-        let offsetIndex = CGFloat(self.currentPageIndex - 1)
-        let x = isHorizontal ? offsetIndex * collectionView.bounds.width : proposedContentOffset.x
-        let y = isHorizontal ? proposedContentOffset.y : offsetIndex * collectionView.bounds.height
-        return .init(x: x, y: y)
+        return self.expectedCurrentPageOffset
     }
 }
 
@@ -189,13 +183,27 @@ extension PDFView: UICollectionViewDelegateFlowLayout {
 }
 
 extension PDFView {
-    
+
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.updateCurrentPageIndex()
+        // 解决快速滑动时转屏的contentOffset问题
+        if scrollView.contentOffset != self.expectedCurrentPageOffset {
+            self.collectionView.setContentOffset(self.expectedCurrentPageOffset, animated: true)
+        }
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         self.updateCurrentPageIndex()
+    }
+    
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.isDragging && !self.isChangingBounceInDragging {
+            self.updateCurrentPageIndex()
+        }
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.isChangingBounceInDragging = false
     }
 }
 
@@ -217,7 +225,8 @@ private extension PDFView {
     
     func relayout() {
         // Invalidate first
-        self.collectionView.collectionViewLayout.invalidateLayout()
+//        self.collectionView.collectionViewLayout.invalidateLayout()
+        self.collectionView.reloadData()
         self.collectionView.frame = self.bounds
     }
     
@@ -242,13 +251,7 @@ private extension PDFView {
     
     func handleSizeChanging() {
         self.loader?.pdfViewSize = self.bounds.size
-        self.loader?.preload(forCurrentIndex: self.currentPageIndex)
-        let page = self.document?.page(of: self.currentPageIndex)
-        let cell = self.collectionView.cellForItem(at: .init(item: self.currentPageIndex - 1,
-        section: 0))
-        if let cell = cell as? PDFCell {
-            self.loadFirstFrame(of: page, for: cell)
-        }
+        self.relayout()
     }
     
     func loadFirstFrame(of page: CGPDFPage?, for cell: PDFCell) {
@@ -259,8 +262,16 @@ private extension PDFView {
             guard let cell = cell, cell.pageView.page == page else {
                 return
             }
-//            print("didLoadFirstFrame - page: \(page), imageSize: \(image?.size), cell: \(cell)")
             cell.pageView.setFirstFrame(image)
         })
+    }
+    
+    var expectedCurrentPageOffset: CGPoint {
+        let collectionView = self.collectionView
+        let isHorizontal = self.scrollDirection == .horizontal
+        let offsetIndex = CGFloat(self.currentPageIndex - 1)
+        let x = isHorizontal ? offsetIndex * collectionView.bounds.width : 0.0
+        let y = isHorizontal ? 0.0 : offsetIndex * collectionView.bounds.height
+        return .init(x: x, y: y)
     }
 }

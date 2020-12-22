@@ -118,10 +118,6 @@ public class PDFPageFirstFrameLoader: NSObject {
         self.cache.setObject(image, forKey: self.key(of: page))
     }
     
-    deinit {
-        print("deinit \(self)")
-    }
-    
     func semaphore(of page: CGPDFPage) -> DispatchSemaphore {
         let key = self.key(of: page) as String
 //        print("semaphores - self: \(self), key: \(key)")
@@ -141,7 +137,7 @@ public class PDFPageFirstFrameLoader: NSObject {
         }
         var size = page.fitSize(with: self.pdfViewSize)
         let scale: CGFloat = UIScreen.main.scale // / 2.0
-        // Not to make too large image.
+        // Limit the size of the image to pageSize.
         let pageSize = page.getBoxRect(.cropBox)
         if size.width > pageSize.width {
             size = pageSize.size

@@ -113,7 +113,7 @@ extension PDFSimpleViewController.Loader: URLSessionDownloadDelegate {
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         do {
             guard let url = downloadTask.currentRequest?.url else {
-                throw SimpleError("'url; is nil")
+                throw SimpleError("'url' is nil")
             }
             let cacheURL = self.cacheURL(of: url)
             try self.createFoldIfNeeded()
@@ -212,11 +212,11 @@ extension PDFSimpleViewController.LoadingView: PDFDocumentLoadingView {
         switch state {
         case .loading:
             self.failureLabel.isHidden = true
-            self.indicator.isHidden = false
+            self.indicator.startAnimating()
         case .completed:
+            self.indicator.stopAnimating()
             if case .failure = result {
                 self.failureLabel.isHidden = false
-                self.indicator.isHidden = true
             }
         default:
             break
