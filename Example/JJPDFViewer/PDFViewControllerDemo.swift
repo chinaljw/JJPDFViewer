@@ -11,13 +11,14 @@ import JJPDFViewer
 
 class PDFViewControllerDemo: UITableViewController {
 
+    let localPDFName = ""
     let urlString = ""
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
             // local
         case 0:
-            guard let path = "javaScript".pdfPathInMainBundle else {
+            guard let path = localPDF.pdfPathInMainBundle else {
                 return
             }
             let vc = PDFSimpleViewController(filePath: path)

@@ -10,6 +10,9 @@ import UIKit
 import JJPDFViewer
 
 class ViewController: UIViewController {
+    
+    let pdf1 = "large"
+    let pdf2 = ""
 
     @IBOutlet weak var pdfView: PDFView!
     
@@ -25,7 +28,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didClickReloadItem(_ sender: Any) {
-        self.pdfView.document = self.document(with: "mongodb")
+        self.pdfView.document = self.document(with: pdf2)
 //        self.pdfView.scrollToPageAt(index: 1, animated: true)
     }
 }
@@ -37,7 +40,7 @@ extension ViewController {
 //        self.pdfView.doubleTapToZoom = false
         self.pdfView.maximumZoomScale = 100
         self.pdfView.delegate = self
-        self.pdfView.document = self.document(with: "large")
+        self.pdfView.document = self.document(with: pdf1)
     }
     
     func document(with name: String) -> PDFDocument? {
