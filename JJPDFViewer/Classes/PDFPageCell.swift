@@ -7,9 +7,9 @@
 
 import UIKit
 
-open class PDFCell: UICollectionViewCell {
+open class PDFPageCell: UICollectionViewCell {
     
-    static let identifier = "PDFCell"
+    static let identifier = "PDFPageCell"
     
     var pageView: PDFZoomablePageView = .init(frame: .zero)
     
@@ -40,14 +40,14 @@ open class PDFCell: UICollectionViewCell {
     }
 }
 
-public extension PDFCell {
+public extension PDFPageCell {
     
     func refresh(with page: CGPDFPage?) {
         self.pageView.page = page
     }
 }
 
-private extension PDFCell {
+private extension PDFPageCell {
     
     func setup() {
         self.contentView.addSubview(self.pageView)

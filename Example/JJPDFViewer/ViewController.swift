@@ -11,8 +11,8 @@ import JJPDFViewer
 
 class ViewController: UIViewController {
     
-    let pdfName1 = "name1"
-    let pdfName2 = "name2"
+    let pdfName1 = "large"
+    let pdfName2 = "vertical"
 
     @IBOutlet weak var pdfView: PDFView!
     
@@ -20,6 +20,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.loadPage()
+        // In iOS 9
+        self.automaticallyAdjustsScrollViewInsets = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,7 +30,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didClickReloadItem(_ sender: Any) {
-        self.pdfView.document = self.document(with: pdf2)
+        self.pdfView.document = self.document(with: pdfName2)
 //        self.pdfView.scrollToPageAt(index: 1, animated: true)
     }
 }
@@ -40,7 +42,8 @@ extension ViewController {
 //        self.pdfView.doubleTapToZoom = false
         self.pdfView.maximumZoomScale = 100
         self.pdfView.delegate = self
-        self.pdfView.document = self.document(with: pdf1)
+//        self.pdfView.preloadNumber = 2
+        self.pdfView.document = self.document(with: pdfName1)
     }
     
     func document(with name: String) -> PDFDocument? {

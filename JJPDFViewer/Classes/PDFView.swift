@@ -44,7 +44,7 @@ open class PDFView: UIView, PDFPageConfig {
                 return
             }
             if let document = self.document?.raw {
-                self.loader = .init(document: document)
+                self.loader = .init(document: document, preloadNumber: self.preloadNumber)
                 self.loader?.pdfViewSize = self.bounds.size
             } else {
                 self.loader = nil
@@ -65,6 +65,11 @@ open class PDFView: UIView, PDFPageConfig {
             self.updateScrollIndicatorSetting()
         }
     }
+    public var preloadNumber: UInt = PDFPageFirstFrameLoader.defaultPreloadNumber {
+        didSet {
+            self.loader?.preloadNumber = self.preloadNumber
+        }
+    }
     
     public var maximumZoomScale: CGFloat = 4.0
     public var doubleTapToZoom: Bool = true
@@ -73,6 +78,7 @@ open class PDFView: UIView, PDFPageConfig {
             self.collectionView.backgroundColor = self.pageBackgroundColor
         }
     }
+    public var showsPageViewScrollIndicator: Bool = true
     
     public private(set) var currentPageIndex: Int = 0 {
         didSet {
@@ -144,20 +150,21 @@ extension PDFView: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: PDFCell.identifier, for: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: PDFPageCell.identifier, for: indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let pageIndex = indexPath.row + 1
-        if let cell = cell as? PDFCell {
+        if let cell = cell as? PDFPageCell {
             cell.pageView.fill(with: self)
             let page = self.document?.page(of: pageIndex)
             cell.refresh(with: page)
             self.loadFirstFrame(of: page, for: cell)
         }
         // preload
-        self.loader?.preload(forCurrentIndex: pageIndex)
+        self.loader?.preload(for: pageIndex)
     }
+    
 }
 
 extension PDFView: UICollectionViewDelegate {
@@ -190,20 +197,27 @@ extension PDFView {
         if scrollView.contentOffset != self.expectedCurrentPageOffset {
             self.collectionView.setContentOffset(self.expectedCurrentPageOffset, animated: true)
         }
+        print("scrollViewDidEndDecelerating")
+//        self.loadCurrentPDFPage()
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         self.updateCurrentPageIndex()
+        print("scrollViewDidEndScrollingAnimation")
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isDragging && !self.isChangingBounceInDragging {
             self.updateCurrentPageIndex()
         }
+        if !scrollView.isDragging {
+            print("scrollViewDidScroll")
+        }
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         self.isChangingBounceInDragging = false
+        print("scrollViewDidEndDragging")
     }
 }
 
@@ -212,7 +226,7 @@ private extension PDFView {
     
     func setup() {
         self.collectionView.backgroundColor = self.pageBackgroundColor
-        self.collectionView.register(PDFCell.classForCoder(), forCellWithReuseIdentifier: PDFCell.identifier)
+        self.collectionView.register(PDFPageCell.classForCoder(), forCellWithReuseIdentifier: PDFPageCell.identifier)
         let flowLayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = self.scrollDirection.direction
         self.collectionView.dataSource = self
@@ -254,7 +268,7 @@ private extension PDFView {
         self.relayout()
     }
     
-    func loadFirstFrame(of page: CGPDFPage?, for cell: PDFCell) {
+    func loadFirstFrame(of page: CGPDFPage?, for cell: PDFPageCell) {
         guard let page = page else {
             return
         }
@@ -273,5 +287,11 @@ private extension PDFView {
         let x = isHorizontal ? offsetIndex * collectionView.bounds.width : 0.0
         let y = isHorizontal ? 0.0 : offsetIndex * collectionView.bounds.height
         return .init(x: x, y: y)
+    }
+    
+    func loadCurrentPDFPage() {
+        if let cell = self.collectionView.cellForItem(at: .init(row: self.currentPageIndex - 1, section: 0)) as? PDFPageCell {
+            cell.pageView.pageView.isHidden = false
+        }
     }
 }

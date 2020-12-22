@@ -33,6 +33,7 @@ open class PDFViewController: UIViewController, PDFDocumentLoaderDelegate {
     }
     
     open func setup() {
+        self.automaticallyAdjustsScrollViewInsets = false
         self.view.backgroundColor = .white
         self.view.addSubview(self.pdfView)
         if let loadingView = self.loadingView {

@@ -55,8 +55,8 @@ public class PDFPageFirstFrameLoader: NSObject {
         self.updateCountLimit()
     }
     
-    func preload(forCurrentIndex index: Int) {
-        assert(index >= 0, "Invalid current index - index: \(index)")
+    func preload(for index: Int) {
+        assert(index >= 0, "Invalid index - index: \(index)")
         for i in 1...self.preloadNumber {
             let i = Int(i)
             let next = index + i
@@ -71,6 +71,7 @@ public class PDFPageFirstFrameLoader: NSObject {
     }
     
     func load(page: CGPDFPage, completion: ((CGPDFPage, UIImage?) -> Void)? = nil) {
+        print("willLoad \(page)")
         guard self.pdfViewSize != .zero else {
             completion?(page, nil)
             return

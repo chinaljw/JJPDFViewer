@@ -11,7 +11,7 @@ import JJPDFViewer
 
 class PDFViewControllerDemo: UITableViewController {
 
-    let localPDFName = "fileName"
+    let localPDFName = "large"
     let urlString = ""
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

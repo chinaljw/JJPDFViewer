@@ -12,6 +12,7 @@ public protocol PDFPageConfig: AnyObject {
     var maximumZoomScale: CGFloat { get set }
     var pageBackgroundColor: UIColor { get set }
     var doubleTapToZoom: Bool { get set }
+    var showsPageViewScrollIndicator: Bool { get set }
 }
 
 public extension PDFPageConfig {
@@ -20,5 +21,6 @@ public extension PDFPageConfig {
         self.maximumZoomScale = config.maximumZoomScale
         self.pageBackgroundColor = config.pageBackgroundColor
         self.doubleTapToZoom = config.doubleTapToZoom
+        self.showsPageViewScrollIndicator = config.showsPageViewScrollIndicator
     }
 }

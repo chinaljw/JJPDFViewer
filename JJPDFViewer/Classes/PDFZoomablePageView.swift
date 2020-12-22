@@ -12,7 +12,7 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
     private static let uninitialFrame: CGRect = .zero
     
     public let scrollView: UIScrollView = .init(frame: .zero)
-    public let pageView: PDFPageView = .init(frame: uninitialFrame)
+    public var pageView: PDFPageView = .init(frame: uninitialFrame)
     public var doubleTapToZoom: Bool = true {
         didSet {
             guard oldValue != self.doubleTapToZoom else {
@@ -34,10 +34,19 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
             self.updatePageBackgroundColor()
         }
     }
+    public var showsPageViewScrollIndicator: Bool = true {
+        didSet {
+            self.updateScrollIndicator()
+        }
+    }
     
     public var page: CGPDFPage? {
         set {
             self.firstFrameView.isHidden = false
+            self.setPageView(isHidden: true)
+//            self.pageView.removeFromSuperview()
+//            self.pageView = .init(frame: Self.uninitialFrame)
+//            self.scrollView.addSubview(self.pageView)
             self.pageView.page = newValue
             self.relayout()
         }
@@ -67,9 +76,13 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
         self.setup()
     }
     
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        self.relayoutIfNeeded()
+    open override var bounds: CGRect {
+        didSet {
+            guard self.bounds.size != oldValue.size else {
+                return
+            }
+            self.relayoutIfNeeded()
+        }
     }
     
     public func setFirstFrame(_ image: UIImage?) {
@@ -84,15 +97,17 @@ private extension PDFZoomablePageView {
         self.updatePageBackgroundColor()
         self.updateZoomGesture()
         self.updateMaximumZoomScale()
-        self.addSubview(self.firstFrameView)
+        self.updateScrollIndicator()
+        self.firstFrameView.isUserInteractionEnabled = true
+        self.scrollView.addSubview(self.firstFrameView)
         self.scrollView.backgroundColor = nil
         self.scrollView.minimumZoomScale = 1.0
         self.scrollView.delegate = self
+        self.pageView.isUserInteractionEnabled = false
         self.scrollView.addSubview(self.pageView)
-        self.scrollView.showsHorizontalScrollIndicator = false
-        self.scrollView.showsVerticalScrollIndicator = false
         self.addSubview(self.scrollView)
         self.relayoutIfNeeded()
+        self.setPageView(isHidden: true)
     }
     
     func relayout() {
@@ -156,7 +171,7 @@ private extension PDFZoomablePageView {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapToZoom(gesture:)))
         gesture.numberOfTapsRequired = 2
         gesture.numberOfTouchesRequired = 1
-        self.pageView.addGestureRecognizer(gesture)
+        self.firstFrameView.addGestureRecognizer(gesture)
         self.zoomGesture = gesture
     }
     
@@ -193,13 +208,22 @@ private extension PDFZoomablePageView {
         self.scrollView.maximumZoomScale = self.maximumZoomScale
         self.pageView.pageLayer.maximumZoomScale = self.maximumZoomScale
     }
+    
+    func updateScrollIndicator() {
+        self.scrollView.showsHorizontalScrollIndicator = self.showsPageViewScrollIndicator
+        self.scrollView.showsVerticalScrollIndicator = self.showsPageViewScrollIndicator
+    }
+    
+    func setPageView(isHidden: Bool) {
+        self.pageView.isHidden = isHidden
+    }
 }
 
 // MARK: - UIScrollViewDelegate
 extension PDFZoomablePageView: UIScrollViewDelegate {
     
     public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        self.firstFrameView.isHidden = true
+        self.setPageView(isHidden: false)
     }
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -211,10 +235,12 @@ extension PDFZoomablePageView: UIScrollViewDelegate {
         if let zoomPoint = self.zoomPoint {
             self.scroll(zoomPoint, toCenterOf: scrollView)
         }
+        self.firstFrameView.center = self.pageView.center
+        self.firstFrameView.transform = .init(scaleX: scrollView.zoomScale, y: scrollView.zoomScale)
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         self.zoomPoint = nil
-        self.firstFrameView.isHidden = scale != 1.0
+        self.setPageView(isHidden: scale < 1.0)
     }
 }
