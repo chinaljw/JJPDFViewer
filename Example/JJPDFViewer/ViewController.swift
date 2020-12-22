@@ -11,8 +11,8 @@ import JJPDFViewer
 
 class ViewController: UIViewController {
     
-    let pdf1 = "large"
-    let pdf2 = ""
+    let pdfName1 = "name1"
+    let pdfName2 = "name2"
 
     @IBOutlet weak var pdfView: PDFView!
     

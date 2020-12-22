@@ -93,7 +93,6 @@ private extension PDFZoomablePageView {
         self.scrollView.showsVerticalScrollIndicator = false
         self.addSubview(self.scrollView)
         self.relayoutIfNeeded()
-        self.pageView.isHidden = true
     }
     
     func relayout() {
