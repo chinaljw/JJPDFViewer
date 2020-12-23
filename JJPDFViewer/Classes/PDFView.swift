@@ -225,7 +225,7 @@ private extension PDFView {
         self.collectionView.isPagingEnabled = true
         self.updateScrollIndicatorSetting()
         self.addSubview(self.collectionView)
-        self.relayout()
+        self.collectionView.frame = self.bounds
     }
     
     func relayout() {
