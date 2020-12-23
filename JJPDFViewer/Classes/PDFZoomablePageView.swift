@@ -40,15 +40,9 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
         }
     }
     
-    public var page: CGPDFPage? {
+    public private(set) var page: CGPDFPage? {
         set {
-            self.firstFrameView.isHidden = false
-            self.setPageView(isHidden: true)
-//            self.pageView.removeFromSuperview()
-//            self.pageView = .init(frame: Self.uninitialFrame)
-//            self.scrollView.addSubview(self.pageView)
             self.pageView.page = newValue
-            self.relayout()
         }
         get {
             return self.pageView.page
@@ -87,6 +81,14 @@ open class PDFZoomablePageView: UIView, PDFPageConfig {
     
     public func setFirstFrame(_ image: UIImage?) {
         self.firstFrameView.image = image
+    }
+    
+    public func refresh(with page: CGPDFPage?, firstFrameLoader: PDFPageFirstFrameLoader?) {
+        self.setFirstFrame(nil)
+        self.setPageView(isHidden: firstFrameLoader != nil)
+        self.page = page
+        self.relayout()
+        self.loadFirstFrameIfNeeded(with: page, loader: firstFrameLoader)
     }
 }
 
@@ -217,6 +219,16 @@ private extension PDFZoomablePageView {
     func setPageView(isHidden: Bool) {
         self.pageView.isHidden = isHidden
     }
+    
+    func loadFirstFrameIfNeeded(with page: CGPDFPage?, loader: PDFPageFirstFrameLoader?) {
+        guard let page = page, let loader = loader else { return }
+        loader.load(page: page) { (page, image) in
+            guard self.page == page else {
+                return
+            }
+            self.setFirstFrame(image)
+        }
+    }
 }
 
 // MARK: - UIScrollViewDelegate
@@ -241,6 +253,5 @@ extension PDFZoomablePageView: UIScrollViewDelegate {
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         self.zoomPoint = nil
-        self.setPageView(isHidden: scale < 1.0)
     }
 }

@@ -33,17 +33,12 @@ open class PDFPageCell: UICollectionViewCell {
         super.layoutSubviews()
         self.relayout()
     }
-    
-    open override func prepareForReuse() {
-        super.prepareForReuse()
-        self.pageView.setFirstFrame(nil)
-    }
 }
 
 public extension PDFPageCell {
     
-    func refresh(with page: CGPDFPage?) {
-        self.pageView.page = page
+    func refresh(with page: CGPDFPage?, firstFrameLoader: PDFPageFirstFrameLoader?) {
+        self.pageView.refresh(with: page, firstFrameLoader: firstFrameLoader)
     }
 }
 

@@ -158,8 +158,7 @@ extension PDFView: UICollectionViewDataSource {
         if let cell = cell as? PDFPageCell {
             cell.pageView.fill(with: self)
             let page = self.document?.page(of: pageIndex)
-            cell.refresh(with: page)
-            self.loadFirstFrame(of: page, for: cell)
+            cell.refresh(with: page, firstFrameLoader: self.loader)
         }
         // preload
         self.loader?.preload(for: pageIndex)
@@ -234,6 +233,8 @@ private extension PDFView {
 //        self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.reloadData()
         self.collectionView.frame = self.bounds
+        // iPad分屏，改变大小时
+        self.repairContentOffset()
     }
     
     func updateCurrentPageIndex() {
@@ -260,18 +261,6 @@ private extension PDFView {
         self.relayout()
     }
     
-    func loadFirstFrame(of page: CGPDFPage?, for cell: PDFPageCell) {
-        guard let page = page else {
-            return
-        }
-        self.loader?.load(page: page, completion: { [weak cell] (page, image) in
-            guard let cell = cell, cell.pageView.page == page else {
-                return
-            }
-            cell.pageView.setFirstFrame(image)
-        })
-    }
-    
     var expectedCurrentPageOffset: CGPoint {
         let collectionView = self.collectionView
         let isHorizontal = self.scrollDirection == .horizontal
@@ -279,5 +268,9 @@ private extension PDFView {
         let x = isHorizontal ? offsetIndex * collectionView.bounds.width : 0.0
         let y = isHorizontal ? 0.0 : offsetIndex * collectionView.bounds.height
         return .init(x: x, y: y)
+    }
+    
+    func repairContentOffset() {
+        self.collectionView.contentOffset = self.expectedCurrentPageOffset
     }
 }

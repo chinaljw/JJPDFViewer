@@ -17,6 +17,10 @@ extension CGPDFPage {
         var result = CGSize.zero
         result.height = isHorizontalFirst ? viewSize.width / pageSize.width * pageSize.height : viewSize.height
         result.width = isHorizontalFirst ? viewSize.width : viewSize.height / pageSize.height * pageSize.width
-        return result
+        if result.width > pageSize.width {
+            return pageSize
+        } else {
+            return result
+        }
     }
 }

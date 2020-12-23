@@ -96,7 +96,7 @@ public class PDFPageFirstFrameLoader: NSObject {
     
     func load(page: CGPDFPage, completion: ((CGPDFPage, UIImage?) -> Void)? = nil) {
         let pdfViewSize = self.pdfViewSize
-        guard self.pdfViewSize != .zero else {
+        guard pdfViewSize != .zero else {
             completion?(page, nil)
             return
         }
@@ -162,13 +162,8 @@ public class PDFPageFirstFrameLoader: NSObject {
         guard self.pdfViewSize != .zero else {
             return nil
         }
-        var size = page.fitSize(with: self.pdfViewSize)
+        let size = page.fitSize(with: self.pdfViewSize)
         let scale: CGFloat = UIScreen.main.scale // / 2.0
-        // Limit the size of the image to pageSize.
-        let pageSize = page.getBoxRect(.cropBox)
-        if size.width > pageSize.width {
-            size = pageSize.size
-        }
         let bounds = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         defer {
