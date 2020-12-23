@@ -13,8 +13,32 @@ public class PDFPageFirstFrameLoader: NSObject {
     /// Default is '1'
     public static var defaultPreloadNumber: UInt = 1
     
-    class Cache<Key: AnyObject, Obj: UIImage>: YYMemoryCache {
+    struct Image {
         
+        let raw: UIImage
+        let pdfViewSize: CGSize
+    }
+    
+    class Cache<Key: Hashable, Value> {
+        
+        let raw: YYMemoryCache = .init()
+        
+        var countLimit: UInt {
+            set {
+                self.raw.countLimit = newValue
+            }
+            get {
+                return self.raw.countLimit
+            }
+        }
+        
+        func object(forKey key: Key) -> Value? {
+            return self.raw.object(forKey: key) as? Value
+        }
+        
+        func setObject(_ object: Value, forKey key: Key) {
+            self.raw.setObject(object, forKey: key)
+        }
     }
     /// No clear cache for now.
     public var pdfViewSize: CGSize = .zero
@@ -26,7 +50,7 @@ public class PDFPageFirstFrameLoader: NSObject {
     }
     
     let semaphoreLock: NSLock = .init()
-    let cache: Cache<NSString, UIImage> = .init()
+    let cache: Cache<String, Image> = .init()
     var semaphores: [String: DispatchSemaphore] {
         get {
             defer {
@@ -71,27 +95,31 @@ public class PDFPageFirstFrameLoader: NSObject {
     }
     
     func load(page: CGPDFPage, completion: ((CGPDFPage, UIImage?) -> Void)? = nil) {
-        print("willLoad \(page)")
+        let pdfViewSize = self.pdfViewSize
         guard self.pdfViewSize != .zero else {
             completion?(page, nil)
             return
         }
-        if let cache = self.cache(of: page) {
-            completion?(page, cache)
-        } else {
-            let pdfViewSize = self.pdfViewSize
+        let oldCache = self.cache(of: page)
+        // 因为cell will display时会把firstFrameImageView的image设置为nil，
+        // 所以这里只要取到cache就回调，保证画面不会空白
+        if let cache = oldCache {
+            completion?(page, cache.raw)
+        }
+        if oldCache == nil || oldCache?.pdfViewSize != pdfViewSize {
             DispatchQueue.global().async {
                 let semaphore = self.semaphore(of: page)
                 semaphore.wait()
                 var result: UIImage?
-                if let cache = self.cache(of: page) {
-                    result = cache
+                if
+                    let cache = self.cache(of: page),
+                    cache.pdfViewSize == pdfViewSize
+                {
+                    result = cache.raw
                 } else {
-                    if
-                        let image = self.makeFirstFrame(of: page),
-                        pdfViewSize == self.pdfViewSize
-                    {
-                        self.set(cache: image, of: page)
+                    if let image = self.makeFirstFrame(of: page) {
+                        self.set(cache: .init(raw: image, pdfViewSize: pdfViewSize),
+                                 of: page)
                         result = image
                     }
                 }
@@ -107,22 +135,20 @@ public class PDFPageFirstFrameLoader: NSObject {
         return "\(size.width).\(size.height)"
     }
     
-    func key(of page: CGPDFPage) -> NSString {
-        return "\(Unmanaged.passUnretained(page).toOpaque())" as NSString
+    func key(of page: CGPDFPage) -> String {
+        return "\(Unmanaged.passUnretained(page).toOpaque())"
     }
     
-    func cache(of page: CGPDFPage) -> UIImage? {
-        return self.cache.object(forKey: self.key(of: page)) as? UIImage
+    func cache(of page: CGPDFPage) -> Image? {
+        return self.cache.object(forKey: self.key(of: page))
     }
     
-    func set(cache image: UIImage, of page: CGPDFPage) {
+    func set(cache image: Image, of page: CGPDFPage) {
         self.cache.setObject(image, forKey: self.key(of: page))
     }
     
     func semaphore(of page: CGPDFPage) -> DispatchSemaphore {
-        let key = self.key(of: page) as String
-//        print("semaphores - self: \(self), key: \(key)")
-//        print("semaphores - semaphores: \(self.semaphores)")
+        let key = self.key(of: page)
         if let semaphore = self.semaphores[key] {
             return semaphore
         } else {
@@ -143,7 +169,6 @@ public class PDFPageFirstFrameLoader: NSObject {
         if size.width > pageSize.width {
             size = pageSize.size
         }
-//        print("will make first frame - page: \(page), pdfViewSize: \(self.pdfViewSize), size: \(size), scale: \(scale)")
         let bounds = CGRect(origin: .zero, size: size)
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         defer {

@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.loadPage()
-        // In iOS 9
+        // In iOS 9.
         self.automaticallyAdjustsScrollViewInsets = false
     }
 

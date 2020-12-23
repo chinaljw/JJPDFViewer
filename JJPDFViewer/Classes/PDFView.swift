@@ -164,7 +164,6 @@ extension PDFView: UICollectionViewDataSource {
         // preload
         self.loader?.preload(for: pageIndex)
     }
-    
 }
 
 extension PDFView: UICollectionViewDelegate {
@@ -197,27 +196,20 @@ extension PDFView {
         if scrollView.contentOffset != self.expectedCurrentPageOffset {
             self.collectionView.setContentOffset(self.expectedCurrentPageOffset, animated: true)
         }
-        print("scrollViewDidEndDecelerating")
-//        self.loadCurrentPDFPage()
     }
     
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         self.updateCurrentPageIndex()
-        print("scrollViewDidEndScrollingAnimation")
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isDragging && !self.isChangingBounceInDragging {
             self.updateCurrentPageIndex()
         }
-        if !scrollView.isDragging {
-            print("scrollViewDidScroll")
-        }
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         self.isChangingBounceInDragging = false
-        print("scrollViewDidEndDragging")
     }
 }
 
@@ -287,11 +279,5 @@ private extension PDFView {
         let x = isHorizontal ? offsetIndex * collectionView.bounds.width : 0.0
         let y = isHorizontal ? 0.0 : offsetIndex * collectionView.bounds.height
         return .init(x: x, y: y)
-    }
-    
-    func loadCurrentPDFPage() {
-        if let cell = self.collectionView.cellForItem(at: .init(row: self.currentPageIndex - 1, section: 0)) as? PDFPageCell {
-            cell.pageView.pageView.isHidden = false
-        }
     }
 }
