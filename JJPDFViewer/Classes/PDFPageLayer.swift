@@ -54,11 +54,10 @@ open class PDFPageLayer: CATiledLayer {
     }
     
     public override func draw(in ctx: CGContext) {
+        ctx.setFillColor(self.pdfBackgroundColor.cgColor)
         guard let page = self.page else {
-            ctx.clear(self.bounds)
             return
         }
-        ctx.setFillColor(self.pdfBackgroundColor.cgColor)
         ctx.fill(ctx.boundingBoxOfClipPath)
         ctx.translateBy(x: 0.0, y: self.bounds.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
