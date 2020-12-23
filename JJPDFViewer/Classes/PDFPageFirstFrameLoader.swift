@@ -11,7 +11,7 @@ import YYCache
 public class PDFPageFirstFrameLoader: NSObject {
     
     /// Default is '1'
-    public static var defaultPreloadNumber: UInt = 1
+    public static var preloadNumber: UInt = 1
     
     struct Image {
         
@@ -48,6 +48,12 @@ public class PDFPageFirstFrameLoader: NSObject {
             self.updateCountLimit()
         }
     }
+    /// Default is 'false'.
+    public var shouldClearCacheWhenEnteringBackground: Bool = false {
+        didSet {
+            self.updateCachePolicy()
+        }
+    }
     
     let semaphoreLock: NSLock = .init()
     let cache: Cache<String, Image> = .init()
@@ -72,11 +78,12 @@ public class PDFPageFirstFrameLoader: NSObject {
     public let document: CGPDFDocument
     
     init(document: CGPDFDocument,
-         preloadNumber: UInt = PDFPageFirstFrameLoader.defaultPreloadNumber) {
+         preloadNumber: UInt = PDFPageFirstFrameLoader.preloadNumber) {
         self.document = document
         self.preloadNumber = preloadNumber
         super.init()
         self.updateCountLimit()
+        self.updateCachePolicy()
     }
     
     func preload(for index: Int) {
@@ -193,5 +200,9 @@ private extension PDFPageFirstFrameLoader {
     func updateCountLimit() {
         // Plus 1 to make sure pages that near current page can't be evicted.
         self.cache.countLimit = 1 + 2 * (self.preloadNumber + 1)
+    }
+    
+    func updateCachePolicy() {
+        self.cache.raw.shouldRemoveAllObjectsWhenEnteringBackground = self.shouldClearCacheWhenEnteringBackground
     }
 }

@@ -44,7 +44,8 @@ open class PDFView: UIView, PDFPageConfig {
                 return
             }
             if let document = self.document?.raw {
-                self.loader = .init(document: document, preloadNumber: self.preloadNumber)
+                self.loader = .init(document: document,
+                                    preloadNumber: self.preloadNumber)
                 self.loader?.pdfViewSize = self.bounds.size
             } else {
                 self.loader = nil
@@ -65,7 +66,7 @@ open class PDFView: UIView, PDFPageConfig {
             self.updateScrollIndicatorSetting()
         }
     }
-    public var preloadNumber: UInt = PDFPageFirstFrameLoader.defaultPreloadNumber {
+    public var preloadNumber: UInt = PDFPageFirstFrameLoader.preloadNumber {
         didSet {
             self.loader?.preloadNumber = self.preloadNumber
         }
@@ -106,8 +107,8 @@ open class PDFView: UIView, PDFPageConfig {
             guard self.bounds.size != oldValue.size else {
                 return
             }
-            if self.collectionView.isDragging {
-                self.isChangingBounceInDragging = true
+            if self.isScrolling {
+                self.isChangingBounceInScrolling = true
             }
             self.handleSizeChanging()
         }
@@ -116,7 +117,7 @@ open class PDFView: UIView, PDFPageConfig {
     // MARK: -
     var loader: PDFPageFirstFrameLoader?
     
-    private var isChangingBounceInDragging: Bool = false
+    private var isChangingBounceInScrolling: Bool = false
 }
 
 public extension PDFView {
@@ -190,6 +191,7 @@ extension PDFView: UICollectionViewDelegateFlowLayout {
 extension PDFView {
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.isChangingBounceInScrolling = false
         self.updateCurrentPageIndex()
         // 解决快速滑动时转屏的contentOffset问题
         if scrollView.contentOffset != self.expectedCurrentPageOffset {
@@ -202,13 +204,13 @@ extension PDFView {
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.isDragging && !self.isChangingBounceInDragging {
+        if scrollView.isDragging && !self.isChangingBounceInScrolling {
             self.updateCurrentPageIndex()
         }
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        self.isChangingBounceInDragging = false
+        self.isChangingBounceInScrolling = false
     }
 }
 
@@ -272,5 +274,9 @@ private extension PDFView {
     
     func repairContentOffset() {
         self.collectionView.contentOffset = self.expectedCurrentPageOffset
+    }
+    
+    var isScrolling: Bool {
+        return self.collectionView.isDragging || self.collectionView.isDecelerating
     }
 }
